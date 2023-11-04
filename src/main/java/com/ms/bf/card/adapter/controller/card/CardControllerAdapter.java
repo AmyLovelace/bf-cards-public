@@ -27,25 +27,11 @@ public class CardControllerAdapter {
         this.createCardIn = createCardIn1;
         this.processor = new RequestProcessor();
     }
-    /*@GetMapping(GET_CARD)
-    public RestResponse<CardRest> getCard(final HttpServletRequest httpServletRequest, @Valid @PathVariable("accountNumber") int accountNumber)throws ExecutionException, InterruptedException {
-        log.info("Llamada al servicio account/{}", accountNumber);
-        Card card = this.getCard.getCard(accountNumber);
-        CardRest response = CardRest.toCardRest(card);
-        log.info("Respuesta del servicio /{}: [{}]", accountNumber, response);
-        return processor.processRequest(Processor.Enriched.of(httpServletRequest),
-                res -> RestResponse.<CardRest>builder()
-                        .data(response)
-                        .id(res.getId())
-                        .status(HttpStatus.OK.value())
-                        .resource(httpServletRequest.getRequestURI())
-                        .metadata(processor.buildMetadata(res.getReq()))
-                        .build()
-        );
-    }*/
+
     @CrossOrigin
     @PostMapping(CREATE_CARD)
     public RestResponse<CardRest> createCard(final HttpServletRequest httpServletRequest, @Valid @RequestBody CardRest request )throws ExecutionException, InterruptedException{
+        log.info("Llamada al servicio de creacion de tarjetas");
         var response =  createCardIn.create(request.toCardDomain());
         return processor.processRequest(Processor.Enriched.of(httpServletRequest),
                 res -> RestResponse.<CardRest>builder()
@@ -58,7 +44,5 @@ public class CardControllerAdapter {
         );
 
     }
-
-
 
 }
