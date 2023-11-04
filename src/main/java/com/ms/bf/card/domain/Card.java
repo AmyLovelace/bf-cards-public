@@ -6,7 +6,7 @@ import lombok.Value;
 @Value
 @Builder
 public class Card{
-    String AccountNumber;
+    String accountNumber;
     int age;
     int cardNumber;
     int cardStatus;

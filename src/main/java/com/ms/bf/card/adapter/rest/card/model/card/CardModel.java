@@ -23,8 +23,8 @@ public class CardModel {
     private static final String CARD_TYPE_PATTERN = "([4|5])";
     private static final int CARD_STATUS_ACTIVE = 2;
     private static final int CARD_STATUS_BLOCKED = 3;
-    private static final int CARD_TYPE_TITULAR = 4;
-    private static final int CARD_TYPE_ADDITIONAL = 5;
+    private static final String CARD_TYPE_STANDARD = "Standard";
+    private static final String CARD_TYPE_PREMIUM = "Premium";
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -32,15 +32,15 @@ public class CardModel {
     @NotBlank
     @NotEmpty(message = "el numero de cuenta debe tener un largo especifico")
     @JsonProperty("numero-cuenta")
-    private AccountModel account;
+    private String accountNumber;
+
+    @JsonProperty("numero-tarjeta")
+    @NotNull
+    private int age;
 
     @JsonProperty("numero-tarjeta")
     @NotNull
     private int cardNumber;
-
-    @JsonProperty("tipo-tarjeta")
-    @NotNull
-    private int cardType;
 
     @JsonProperty("estado-tarjeta")
     @NotNull
@@ -49,14 +49,14 @@ public class CardModel {
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
 
-    @JsonProperty("descripcion-tipo")
-    private String descriptionType;
+    @JsonProperty("descripcion-memebresia")
+    private String membership;
 
-    public @javax.validation.constraints.NotNull int isTitular() {
-        if(cardType==4){
-            return CARD_TYPE_TITULAR;
+    public @javax.validation.constraints.NotNull String isStandard() {
+        if(membership==CARD_TYPE_STANDARD){
+            return CARD_TYPE_STANDARD;
         }else{
-            return CARD_TYPE_ADDITIONAL;
+            return CARD_TYPE_PREMIUM;
         }
 
     }
@@ -79,22 +79,13 @@ public class CardModel {
         return descriptionStatus;
 
     };
-    public String descriptionType(){
-        if(isTitular()==4){
-            setDescriptionType("Titular");
-        }else{
-            setDescriptionType("Adicional");
-        }
-        return descriptionType;
 
-    };
     public Card toCardDomain() {
         return Card.builder()
-                .account(this.account.toAccountDomain())
+                .accountNumber(this.accountNumber)
                 .cardNumber(this.cardNumber)
-                .cardType(isTitular())
+                .membership(isStandard())
                 .cardStatus(isActive())
-                .descriptionType(descriptionType())
                 .descriptionStatus(descriptionStatus())
                 .build();
 

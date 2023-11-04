@@ -4,14 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ms.bf.card.domain.Account;
 import com.ms.bf.card.domain.Card;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.util.Objects;
 
 @Data
@@ -24,22 +21,22 @@ public class CardRest {
     private static final String CARD_TYPE_PATTERN = "([4|5])";
     private static final int CARD_STATUS_ACTIVE = 2;
     private static final int CARD_STATUS_BLOCKED = 3;
-    private static final int CARD_TYPE_TITULAR = 4;
-    private static final int CARD_TYPE_ADDITIONAL = 5;
+    private static final String CARD_TYPE_STANDARD = "Standard";
+    private static final String CARD_TYPE_PREMIUM = "Premium";
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @NotNull
     @JsonProperty("cuenta")
-    AccountRest account;
+    String accountNumber;
 
+    @JsonProperty("numero-tarjeta")
+    @NotNull
+    int age;
 
     @JsonProperty("numero-tarjeta")
     @NotNull
     int cardNumber;
 
-    @JsonProperty("tipo-tarjeta")
-    @NotNull
-    int cardType;
 
     @JsonProperty("estado-tarjeta")
     @NotNull
@@ -49,13 +46,13 @@ public class CardRest {
     String descriptionStatus;
 
     @JsonProperty("descripcion-tipo")
-    String descriptionType;
+    String membership;
 
-    public int isTitular() {
-        if (cardType == 4) {
-            return CARD_TYPE_TITULAR;
+    public String isStandard() {
+        if (membership == CARD_TYPE_STANDARD) {
+            return CARD_TYPE_STANDARD;
         } else {
-            return CARD_TYPE_ADDITIONAL;
+            return CARD_TYPE_PREMIUM;
         }
 
     }
@@ -68,8 +65,7 @@ public class CardRest {
         }
     }
 
-
-        public String descriptionStatus(){
+    public String descriptionStatus(){
         if(isActive()==2){
             setDescriptionStatus("Activo");
         }else{
@@ -78,36 +74,27 @@ public class CardRest {
         return descriptionStatus;
 
     };
-    public String descriptionType(){
-        if(isTitular()==4){
-            setDescriptionType("Titular");
-        }else{
-            setDescriptionType("Adicional");
-        }
-        return descriptionType;
-
-    };
 
     public static CardRest toCardRest(Card card) {
         return Objects.nonNull(card)?
                 CardRest.builder()
-                        .account(AccountRest.toAccountRest(card.getAccount()))
-                        .cardType(card.getCardType())
+                        .accountNumber(card.getAccountNumber())
+                        .age(card.getAge())
                         .cardNumber(card.getCardNumber())
                         .cardStatus(card.getCardStatus())
+                        .descriptionStatus(card.getDescriptionStatus())
+                        .membership(card.getMembership())
                         .build() : null;
     }
 
     public Card toCardDomain() {
         return Card.builder()
-                        .cardNumber(cardNumber)
-                        .account(Account.builder()
-                        .accountNumber(this.getAccount().getAccountNumber())
-                        .build())
-                        .cardType(isTitular())
-                        .descriptionType(descriptionType())
+                        .accountNumber(this.accountNumber)
+                        .age(this.age)
+                        .cardNumber(this.cardNumber)
                         .cardStatus(isActive())
                         .descriptionStatus(descriptionStatus())
+                        .membership(isStandard())
                         .build() ;
     }
 
