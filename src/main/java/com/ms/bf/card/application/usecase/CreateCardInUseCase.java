@@ -1,20 +1,15 @@
 package com.ms.bf.card.application.usecase;
 
-import com.ms.bf.card.application.port.in.CreateCardIn;
+import com.ms.bf.card.adapter.kafka.KafkaProducerPort;
 import com.ms.bf.card.application.port.in.CreateIn;
-import com.ms.bf.card.application.port.in.GetCard;
 import com.ms.bf.card.application.port.out.CardRepository;
 import com.ms.bf.card.config.ErrorCode;
 import com.ms.bf.card.config.exception.CardException;
 import com.ms.bf.card.domain.Card;
-import com.ms.bf.card.domain.CardType;
-import com.ms.bf.card.domain.CreateCard;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 @Component
@@ -23,15 +18,14 @@ import java.util.concurrent.Executor;
 public class CreateCardInUseCase implements CreateIn {
 
     private final CardRepository createCardRepository;
-    private final GetCard getCard;
     private final Executor executor;
-    private final CardType type ;
 
 
+    private final KafkaProducerPort kafkaProducerPort;
     @Override
     public Card create(Card card) {
         Card create = createCardRepository.create(card);
-        if (card.getAccount() != null ) {
+        if (card.getAccountNumber()!= null ) {
             return create;
         } throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
     }

@@ -1,6 +1,5 @@
 package com.ms.bf.card.adapter.controller.card;
 
-import com.ms.bf.card.application.port.in.GetCard;
 import com.ms.bf.card.mocks.CardMock;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

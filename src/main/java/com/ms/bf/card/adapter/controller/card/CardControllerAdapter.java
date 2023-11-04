@@ -1,15 +1,12 @@
 package com.ms.bf.card.adapter.controller.card;
 import com.ms.bf.card.adapter.controller.model.card.CardStatusRest;
-import com.ms.bf.card.adapter.controller.model.card.CreateCardRest;
 import com.ms.bf.card.application.port.in.CreateIn;
-import com.ms.bf.card.application.port.in.UpdateCardStatus;
 import lombok.extern.slf4j.Slf4j;
 
 import com.ms.bf.card.adapter.controller.model.RestResponse;
 import com.ms.bf.card.adapter.controller.model.card.CardRest;
 import com.ms.bf.card.adapter.controller.processor.Processor;
 import com.ms.bf.card.adapter.controller.processor.RequestProcessor;
-import com.ms.bf.card.application.port.in.GetCard;
 import com.ms.bf.card.domain.Card;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +30,8 @@ public class CardControllerAdapter {
     private final UpdateCardStatus updateCard;
 
 
-    public CardControllerAdapter(GetCard getCard, CreateIn createCardIn1, UpdateCardStatus updateCard) {
-        this.getCard = getCard;
+    public CardControllerAdapter( CreateIn createCardIn1) {
         this.createCardIn = createCardIn1;
-        this.updateCard = updateCard;
         this.processor = new RequestProcessor();
     }
     @GetMapping(GET_CARD)
@@ -71,19 +66,6 @@ public class CardControllerAdapter {
 
     }
 
-    @PutMapping(UPDATE_CARD)
-    public RestResponse<CardStatusRest> updateCard(@PathVariable("cardNumber") String cardNumber,final HttpServletRequest httpServletRequest, @RequestBody @Valid CardStatusRest request ) throws ExecutionException, InterruptedException, URISyntaxException {
-        log.info("Llamada al servicio update/{}",cardNumber);
-        var response =  updateCard.UpdateStatus(request.toCardStatusDomain());
-        return processor.processRequest(Processor.Enriched.of(httpServletRequest),
-                res -> RestResponse.<CardStatusRest>builder()
-                        .data(CardStatusRest.toCardStatusRest(response))
-                        .id(res.getId())
-                        .status(HttpStatus.OK.value())
-                        .resource(httpServletRequest.getRequestURI())
-                        .metadata(processor.buildMetadata(res.getReq()))
-                        .build()
-        );
-    }
+
 
 }

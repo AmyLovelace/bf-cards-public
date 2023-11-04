@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ms.bf.card.adapter.rest.card.model.account.AccountModel;
-import com.ms.bf.card.domain.CreateCard;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;

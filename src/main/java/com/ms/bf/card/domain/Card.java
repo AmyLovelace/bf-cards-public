@@ -2,16 +2,14 @@ package com.ms.bf.card.domain;
 
 import lombok.Builder;
 import lombok.Value;
-import lombok.With;
 
 @Value
 @Builder
-@With
 public class Card{
-    Account account;
+    String AccountNumber;
+    int age;
     int cardNumber;
     int cardStatus;
     String descriptionStatus;
-    int cardType;
-    String descriptionType;
+    String membership;
 }
