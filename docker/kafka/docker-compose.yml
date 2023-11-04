@@ -12,8 +12,7 @@ services:
     image: ubuntu/kafka:latest
     container_name: kafka
     ports:
-      - "29092:29092"
-      - "9092:9092"
+      - "29092:9092"
     volumes:
       - /Users/amanecercabrera/Documents/Repositories/bf-cards-public/docker/kafka/config/server.properties
     environment:
@@ -26,7 +25,6 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_BROKER_RACK: Rack-1
-
     networks:
       - kafka-net
 
