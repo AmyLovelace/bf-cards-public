@@ -8,6 +8,7 @@ import com.ms.bf.card.adapter.rest.handler.RestTemplateErrorHandler;
 import com.ms.bf.card.adapter.rest.card.model.card.CardModel;
 import com.ms.bf.card.application.port.out.CardRepository;
 import com.ms.bf.card.config.ErrorCode;
+import com.ms.bf.card.config.property.KafkaProperty;
 import com.ms.bf.card.domain.Card;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -22,6 +23,8 @@ import java.util.Optional;
 public class CardRestClientAdapter implements CardRepository{
 
     private final RestTemplate restTemplate;
+
+    private KafkaProperty property;
 
 
 
