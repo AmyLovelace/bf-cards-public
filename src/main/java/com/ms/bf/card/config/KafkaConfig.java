@@ -22,7 +22,7 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic accountTopic(){
+    public NewTopic cardTopic(){
         Map<String,String> configurations = new HashMap<>();
         configurations.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE);
         configurations.put(TopicConfig.RETENTION_MS_CONFIG, kafkaProperty.getRetentionMsConfig());
