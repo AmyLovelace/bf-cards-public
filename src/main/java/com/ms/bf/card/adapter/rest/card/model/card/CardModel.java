@@ -83,6 +83,7 @@ public class CardModel {
     public Card toCardDomain() {
         return Card.builder()
                 .accountNumber(this.accountNumber)
+                .age(this.age)
                 .cardNumber(this.cardNumber)
                 .membership(isStandard())
                 .cardStatus(isActive())

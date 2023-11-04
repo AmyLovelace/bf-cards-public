@@ -29,7 +29,7 @@ public class CardRest {
     @JsonProperty("cuenta")
     String accountNumber;
 
-    @JsonProperty("numero-tarjeta")
+    @JsonProperty("edad")
     @NotNull
     int age;
 
