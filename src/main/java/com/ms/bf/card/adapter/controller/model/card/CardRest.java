@@ -10,21 +10,18 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.Objects;
-import java.util.UUID;
+
 
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CardRest {
 
-    private static final String CARD_NUMBER_PATTERN = "([0|1])";
-    private static final String CARD_STATUS_PATTERN = "([2|3])";
-    private static final String CARD_TYPE_PATTERN = "([4|5])";
     private static final int CARD_STATUS_ACTIVE = 2;
     private static final int CARD_STATUS_BLOCKED = 3;
     private static final String CARD_TYPE_STANDARD = "Standard";
     private static final String CARD_TYPE_PREMIUM = "Premium";
+    private static final int DEFAULT_CARD_STATUS = CARD_STATUS_ACTIVE;
     private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -43,7 +40,7 @@ public class CardRest {
 
 
     @JsonProperty("estado-tarjeta")
-    Integer cardStatus ;
+    Integer cardStatus;
 
     @JsonProperty("descripcion-estado")
     String descriptionStatus;
@@ -70,6 +67,7 @@ public class CardRest {
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
+        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_ACTIVE ) ? DEFAULT_CARD_STATUS : this.cardStatus;
 
         String generatedCardNumber = generateCardNumber();
 
@@ -78,7 +76,7 @@ public class CardRest {
                 .accountNumber(this.accountNumber)
                 .age(this.age)
                 .cardNumber(generatedCardNumber)
-                .cardStatus(this.cardStatus > 0 ? this.cardStatus : CARD_STATUS_BLOCKED)
+                .cardStatus(cardStatusValue)
                 .descriptionStatus(descriptionStatus())
                 .membership(isStandard())
                 .build();
