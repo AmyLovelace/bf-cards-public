@@ -43,8 +43,7 @@ public class CardRest {
 
 
     @JsonProperty("estado-tarjeta")
-    @NotNull
-    int cardStatus = CARD_STATUS_ACTIVE;
+    Integer cardStatus ;
 
     @JsonProperty("descripcion-estado")
     String descriptionStatus;
@@ -71,6 +70,7 @@ public class CardRest {
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
+
         String generatedCardNumber = generateCardNumber();
 
 

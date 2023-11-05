@@ -48,8 +48,7 @@ public class CardModel {
     private String cardNumber;
 
     @JsonProperty("estado-tarjeta")
-    @NotNull
-    private int cardStatus = DEFAULT_CARD_STATUS;
+    private Integer cardStatus = DEFAULT_CARD_STATUS;
 
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
@@ -74,10 +73,10 @@ public class CardModel {
     }
 
     public int isActive() {
-        if (cardStatus == CARD_STATUS_BLOCKED) {
-            return CARD_STATUS_BLOCKED;
-        } else {
+        if (cardStatus == null || cardStatus == CARD_STATUS_ACTIVE ) {
             return CARD_STATUS_ACTIVE;
+        } else {
+            return CARD_STATUS_BLOCKED;
         }
     }
 
@@ -116,14 +115,17 @@ public class CardModel {
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
+
+        int cardStatusValue = (this.cardStatus == 0) ? DEFAULT_CARD_STATUS : this.cardStatus;
         String generatedCardNumber = generateCardNumber();
+
 
         return Card.builder()
                 .accountNumber(this.accountNumber)
                 .age(this.age)
                 .cardNumber(generatedCardNumber)
                 .membership(isStandard())
-                .cardStatus(isActive())
+                .cardStatus(cardStatusValue)
                 .descriptionStatus(descriptionStatus())
                 .build();
 
