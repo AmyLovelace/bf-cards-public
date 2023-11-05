@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,9 +25,11 @@ public class CardRest {
     private static final int CARD_STATUS_BLOCKED = 3;
     private static final String CARD_TYPE_STANDARD = "Standard";
     private static final String CARD_TYPE_PREMIUM = "Premium";
+    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{7,8}-[0-9Kk]$";
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @NotNull
+    @Pattern(regexp = ACCOUNT_NUMBER_REGEX, message = "El número de cuenta no tiene el formato de RUT válido.")
     @JsonProperty("cuenta")
     String accountNumber;
 
@@ -41,7 +44,7 @@ public class CardRest {
 
     @JsonProperty("estado-tarjeta")
     @NotNull
-    int cardStatus;
+    int cardStatus = CARD_STATUS_ACTIVE;
 
     @JsonProperty("descripcion-estado")
     String descriptionStatus;
@@ -49,54 +52,73 @@ public class CardRest {
     @JsonProperty("descripcion-tipo")
     String membership;
 
-    public String isStandard() {
-        if (membership == CARD_TYPE_STANDARD) {
-            return CARD_TYPE_STANDARD;
-        } else {
-            return CARD_TYPE_PREMIUM;
+    public static CardRest toCardRest(Card card) {
+        if (card == null) {
+            return null;
         }
 
+        return CardRest.builder()
+                .accountNumber(card.getAccountNumber())
+                .age(card.getAge())
+                .cardNumber(card.getCardNumber())
+                .cardStatus(card.getCardStatus())
+                .descriptionStatus(card.getDescriptionStatus())
+                .membership(card.getMembership())
+                .build();
+    }
+
+    public Card toCardDomain() {
+        if (this.age < 18) {
+            throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
+        }
+
+        return Card.builder()
+                .accountNumber(this.accountNumber)
+                .age(this.age)
+                .cardNumber(this.cardNumber != null ? this.cardNumber : generateCardNumber())
+                .cardStatus(this.cardStatus > 0 ? this.cardStatus : CARD_STATUS_BLOCKED)
+                .descriptionStatus(descriptionStatus())
+                .membership(isStandard())
+                .build();
+    }
+
+    private String generateCardNumber() {
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            if (i > 0 && i % 4 == 0) {
+                cardNumber.append("-");
+            }
+            int digit = (int) (Math.random() * 10);
+            cardNumber.append(digit);
+        }
+        return cardNumber.toString();
+    }
+
+    public String isStandard() {
+        if (membership == null || membership.isEmpty()) {
+            return CARD_TYPE_STANDARD;
+        } else if (membership.equals(CARD_TYPE_PREMIUM)) {
+            return CARD_TYPE_PREMIUM;
+        } else {
+            return CARD_TYPE_STANDARD;
+        }
     }
 
     public int isActive() {
-        if (cardStatus == 3) {
+        if (cardStatus == CARD_STATUS_BLOCKED) {
             return CARD_STATUS_BLOCKED;
         } else {
             return CARD_STATUS_ACTIVE;
         }
     }
 
-    public String descriptionStatus(){
-        if(isActive()==2){
+    public String descriptionStatus() {
+        if (isActive() == 2) {
             setDescriptionStatus("Activo");
-        }else{
+        } else {
             setDescriptionStatus("Bloqueado");
         }
         return descriptionStatus;
-
-    };
-
-    public static CardRest toCardRest(Card card) {
-        return Objects.nonNull(card)?
-                CardRest.builder()
-                        .accountNumber(card.getAccountNumber())
-                        .age(card.getAge())
-                        .cardNumber(card.getCardNumber())
-                        .cardStatus(card.getCardStatus())
-                        .descriptionStatus(card.getDescriptionStatus())
-                        .membership(card.getMembership())
-                        .build() : null;
     }
-
-    public Card toCardDomain() {
-        return Card.builder()
-                        .accountNumber(this.accountNumber)
-                        .age(this.age)
-                        .cardNumber(this.cardNumber)
-                        .cardStatus(isActive())
-                        .descriptionStatus(descriptionStatus())
-                        .membership(isStandard())
-                        .build() ;
-    }
-
 }
+
