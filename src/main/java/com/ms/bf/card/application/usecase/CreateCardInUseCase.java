@@ -20,15 +20,20 @@ public class CreateCardInUseCase implements CreateIn {
     private final CardRepository createCardRepository;
     private final Executor executor;
 
-
     private final KafkaProducerPort kafkaProducerPort;
-    @Override
+    /*@Override
     public Card create(Card card) {
         Card create = createCardRepository.create(card);
         if (card.getCardNumber() > 0  ) {
             return create;
         } throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
+    }*/
+
+    @Override
+    public Integer create(Card card) {
+        return kafkaProducerPort.sendMessage(card);
     }
+}
 
 /*
     private CompletableFuture<Boolean> ifCardExists(Card card) {
@@ -49,5 +54,5 @@ public class CreateCardInUseCase implements CreateIn {
     }
 */
 
-}
+
 

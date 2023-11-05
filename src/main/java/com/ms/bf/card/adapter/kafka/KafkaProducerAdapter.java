@@ -23,10 +23,11 @@ public class KafkaProducerAdapter implements KafkaProducerPort{
     }
 
     @Override
-    public Integer SendMessage(Card card) {
+    public Integer sendMessage(Card card) {
         log.info("Message sent -> {} ", card.toString());
         Message<Card> message = MessageBuilder.withPayload(card).setHeader(KafkaHeaders.TOPIC, kafkaProperty.getTopicName()).build();
         kafkaTemplate.send(message);
+        log.info("Sent message value: {}", card.toString());
         return 0;
         //ATRAPAR EXCEPCION
     }
