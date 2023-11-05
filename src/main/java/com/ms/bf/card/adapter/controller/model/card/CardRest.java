@@ -8,8 +8,10 @@ import com.ms.bf.card.domain.Card;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.regex.Matcher;
 
 
 @Data
@@ -23,10 +25,12 @@ public class CardRest {
     private static final String CARD_TYPE_PREMIUM = "Premium";
     private static final int DEFAULT_CARD_STATUS = CARD_STATUS_ACTIVE;
     private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
+    private static final java.util.regex.Pattern ACCOUNT_NUMBER_PATTERN = java.util.regex.Pattern.compile(ACCOUNT_NUMBER_REGEX);
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @NotNull
     @Pattern(regexp = ACCOUNT_NUMBER_REGEX, message = "El número de cuenta no tiene el formato de RUT válido.")
+    @NotEmpty(message = "el numero de cuenta debe tener un largo especifico")
     @JsonProperty("cuenta")
     String accountNumber;
 
@@ -63,7 +67,11 @@ public class CardRest {
                 .build();
     }
 
+
     public Card toCardDomain() {
+        if (!isValidAccountNumber(this.accountNumber)) {
+            throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
+        }
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
@@ -80,6 +88,10 @@ public class CardRest {
                 .descriptionStatus(descriptionStatus())
                 .membership(isStandard())
                 .build();
+    }
+    public static boolean isValidAccountNumber(String accountNumber) {
+        Matcher matcher = ACCOUNT_NUMBER_PATTERN.matcher(accountNumber);
+        return matcher.matches();
     }
 
     private String generateCardNumber() {

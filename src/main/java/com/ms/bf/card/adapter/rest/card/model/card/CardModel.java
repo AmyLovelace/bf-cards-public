@@ -31,7 +31,7 @@ public class CardModel {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @NotNull
-    @NotBlank
+    @javax.validation.constraints.Pattern(regexp = ACCOUNT_NUMBER_REGEX, message = "El número de cuenta no tiene el formato de RUT válido.")
     @NotEmpty(message = "el numero de cuenta debe tener un largo especifico")
     @JsonProperty("cuenta")
     private String accountNumber;
@@ -53,11 +53,32 @@ public class CardModel {
     @JsonProperty("descripcion-tipo")
     private String membership;
 
+    public Card toCardDomain() {
+        if (!isValidAccountNumber(this.accountNumber)) {
+            throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
+        }
+        if (this.age < 18) {
+            throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
+        }
+        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_ACTIVE ) ? DEFAULT_CARD_STATUS : this.cardStatus;
+
+        String generatedCardNumber = generateCardNumber();
+
+
+        return Card.builder()
+                .accountNumber(this.accountNumber)
+                .age(this.age)
+                .cardNumber(generatedCardNumber)
+                .membership(isStandard())
+                .cardStatus(cardStatusValue)
+                .descriptionStatus(descriptionStatus())
+                .build();
+
+    }
     public static boolean isValidAccountNumber(String accountNumber) {
         Matcher matcher = ACCOUNT_NUMBER_PATTERN.matcher(accountNumber);
         return matcher.matches();
     }
-
     public String isStandard() {
         if (membership == null || membership.isEmpty()) {
             return CARD_MEMBERSHIP_STANDARD;
@@ -75,16 +96,6 @@ public class CardModel {
             return CARD_STATUS_BLOCKED;
         }
     }
-
-    public String descriptionStatus(){
-        if(isActive()==2 && descriptionStatus == null){
-            setDescriptionStatus("Activo");
-        }else if(descriptionStatus == null){
-            setDescriptionStatus("Bloqueado");
-        }
-        return descriptionStatus;
-    }
-
     private String generateCardNumber() {
         StringBuilder number = new StringBuilder();
         for (int i = 0; i < 12; i++) {
@@ -97,31 +108,15 @@ public class CardModel {
         return number.toString();
     }
 
-
-
-    public Card toCardDomain() {
-        if (!isValidAccountNumber(this.accountNumber)) {
-            throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
+    public String descriptionStatus(){
+        if(isActive()==2 && descriptionStatus == null){
+            setDescriptionStatus("Activo");
+        }else if(descriptionStatus == null){
+            setDescriptionStatus("Bloqueado");
         }
-        if (this.age < 18) {
-            throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
-        }
-        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_ACTIVE ) ? DEFAULT_CARD_STATUS : this.cardStatus;
-
-
-        String generatedCardNumber = generateCardNumber();
-
-
-        return Card.builder()
-                .accountNumber(this.accountNumber)
-                .age(this.age)
-                .cardNumber(generatedCardNumber)
-                .membership(isStandard())
-                .cardStatus(cardStatusValue)
-                .descriptionStatus(descriptionStatus())
-                .build();
-
+        return descriptionStatus;
     }
+
 
 
 

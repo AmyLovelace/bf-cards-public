@@ -4,6 +4,5 @@ import com.ms.bf.card.domain.Card;
 
 public interface CreateIn {
 
-//    Card create(Card card);
        Integer create(Card card);
 }

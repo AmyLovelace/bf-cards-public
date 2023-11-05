@@ -4,7 +4,7 @@ package com.ms.bf.card.config.exception;
 import com.ms.bf.card.config.ErrorCode;
 import net.logstash.logback.encoder.org.apache.commons.lang3.StringUtils;
 
-public abstract class GenericException extends RuntimeException {
+public class GenericException extends RuntimeException {
     private static final String SPACE = StringUtils.SPACE;
     private static final String COMMA = ",";
     private final ErrorCode errorCode;
@@ -14,7 +14,7 @@ public abstract class GenericException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    protected GenericException(ErrorCode errorCode, String message) {
+    public GenericException(ErrorCode errorCode, String message) {
         super(buildMessage(message, errorCode));
         this.errorCode = errorCode;
     }
