@@ -44,7 +44,7 @@ public class CardModel {
     private String cardNumber;
 
     @JsonProperty("estado-tarjeta")
-    private Integer cardStatus = DEFAULT_CARD_STATUS;
+    private Integer cardStatus;
 
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
