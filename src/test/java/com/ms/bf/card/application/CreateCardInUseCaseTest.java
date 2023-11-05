@@ -15,7 +15,7 @@ import org.springframework.messaging.MessagingException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class CreateCardInUseCaseTest {
 
@@ -47,5 +47,21 @@ public class CreateCardInUseCaseTest {
         when(kafkaProducerPort.sendMessage(card)).thenThrow(new MessagingException("Error al generar el mensaje"));
 
         assertThrows(GenericException.class, () -> createCardInUseCase.create(card));
+    }
+    @Test
+    public void testCreateCallsSendMessageWithCorrectArgument() throws GenericException, MessagingException {
+        when(kafkaProducerPort.sendMessage(card)).thenReturn(0);
+
+        Integer result = createCardInUseCase.create(card);
+
+        verify(kafkaProducerPort).sendMessage(card);
+    }
+    @Test
+    public void testCreateCallsSendMessageOnce() throws GenericException, MessagingException {
+        when(kafkaProducerPort.sendMessage(card)).thenReturn(0);
+
+        Integer result = createCardInUseCase.create(card);
+
+        verify(kafkaProducerPort, times(1)).sendMessage(card);
     }
 }
