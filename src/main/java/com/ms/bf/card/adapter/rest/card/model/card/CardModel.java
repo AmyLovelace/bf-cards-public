@@ -11,6 +11,9 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Data
@@ -23,8 +26,10 @@ public class CardModel {
     private static final String CARD_TYPE_PATTERN = "([4|5])";
     private static final int CARD_STATUS_ACTIVE = 2;
     private static final int CARD_STATUS_BLOCKED = 3;
-    private static final String CARD_TYPE_STANDARD = "Standard";
-    private static final String CARD_TYPE_PREMIUM = "Premium";
+    private static final String CARD_MEMBERSHIP_STANDARD = "Standard";
+    private static final String CARD_MEMBERSHIP_PREMIUM = "Premium";
+    private static final int DEFAULT_CARD_STATUS = CARD_STATUS_ACTIVE;
+    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{7,8}-[0-9Kk]$";
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -40,11 +45,11 @@ public class CardModel {
 
     @JsonProperty("numero-tarjeta")
     @NotNull
-    private int cardNumber;
+    private String cardNumber;
 
     @JsonProperty("estado-tarjeta")
     @NotNull
-    private int cardStatus;
+    private int cardStatus = DEFAULT_CARD_STATUS;
 
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
@@ -52,22 +57,30 @@ public class CardModel {
     @JsonProperty("descripcion-tipo")
     private String membership;
 
-    public @javax.validation.constraints.NotNull String isStandard() {
-        if(membership==CARD_TYPE_STANDARD){
-            return CARD_TYPE_STANDARD;
-        }else{
-            return CARD_TYPE_PREMIUM;
-        }
 
+    public static boolean isValidAccountNumber(String accountNumber) {
+        Pattern pattern = Pattern.compile(ACCOUNT_NUMBER_REGEX);
+        Matcher matcher = pattern.matcher(accountNumber);
+        return matcher.matches();
+    }
+    public String isStandard() {
+        if (membership == null || membership.isEmpty()) {
+            return CARD_MEMBERSHIP_STANDARD;
+        } else if (membership.equals(CARD_MEMBERSHIP_PREMIUM)) {
+            return CARD_MEMBERSHIP_PREMIUM;
+        } else {
+            return CARD_MEMBERSHIP_STANDARD;
+        }
     }
 
     public int isActive() {
-        if (cardStatus == 3) {
+        if (cardStatus == CARD_STATUS_BLOCKED) {
             return CARD_STATUS_BLOCKED;
         } else {
             return CARD_STATUS_ACTIVE;
         }
     }
+
 
 
     public String descriptionStatus(){
@@ -79,12 +92,32 @@ public class CardModel {
         return descriptionStatus;
 
     };
+    private String generateCardNumber() {
+        StringBuilder cardNumber = new StringBuilder();
+        for (int i = 0; i < 16; i++) {
+            if (i > 0 && i % 4 == 0) {
+                cardNumber.append("-");
+            }
+            int digit = (int) (Math.random() * 10);
+            cardNumber.append(digit);
+        }
+        return cardNumber.toString();
+    }
+
 
     public Card toCardDomain() {
+        if (!isValidAccountNumber(this.accountNumber)) {
+            throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
+        }
+        if (this.age < 18) {
+            throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
+        }
+        String generatedCardNumber = generateCardNumber();
+
         return Card.builder()
                 .accountNumber(this.accountNumber)
                 .age(this.age)
-                .cardNumber(this.cardNumber)
+                .cardNumber(generatedCardNumber)
                 .membership(isStandard())
                 .cardStatus(isActive())
                 .descriptionStatus(descriptionStatus())

@@ -10,6 +10,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotNull;
 import java.util.Objects;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -35,7 +36,7 @@ public class CardRest {
 
     @JsonProperty("numero-tarjeta")
     @NotNull
-    int cardNumber;
+    String cardNumber;
 
 
     @JsonProperty("estado-tarjeta")

@@ -8,7 +8,7 @@ import lombok.Value;
 public class Card{
     String accountNumber;
     int age;
-    int cardNumber;
+    String cardNumber;
     int cardStatus;
     String descriptionStatus;
     String membership;

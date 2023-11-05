@@ -21,13 +21,6 @@ public class CreateCardInUseCase implements CreateIn {
     private final Executor executor;
 
     private final KafkaProducerPort kafkaProducerPort;
-    /*@Override
-    public Card create(Card card) {
-        Card create = createCardRepository.create(card);
-        if (card.getCardNumber() > 0  ) {
-            return create;
-        } throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
-    }*/
 
     @Override
     public Integer create(Card card) {
@@ -35,24 +28,6 @@ public class CreateCardInUseCase implements CreateIn {
     }
 }
 
-/*
-    private CompletableFuture<Boolean> ifCardExists(Card card) {
-        return CompletableFuture.supplyAsync(() -> {
-            Card existingCard = null;
-            try {
-                existingCard = getCard.getCard(card.getCardNumber());
-            } catch (ExecutionException e) {
-                throw new RuntimeException(e);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            return existingCard != null;
-        }, executor).exceptionally(exception -> {
-            log.error("Ocurrió un error al obtener la información de la tarjeta", exception);
-            return false;
-        });
-    }
-*/
 
 
 
