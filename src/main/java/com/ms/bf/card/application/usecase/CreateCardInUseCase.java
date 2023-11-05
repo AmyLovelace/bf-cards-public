@@ -25,7 +25,7 @@ public class CreateCardInUseCase implements CreateIn {
     @Override
     public Card create(Card card) {
         Card create = createCardRepository.create(card);
-        if (card.getAccountNumber()!= null ) {
+        if (card.getCardNumber() > 0  ) {
             return create;
         } throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
     }

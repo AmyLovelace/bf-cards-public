@@ -31,10 +31,10 @@ public class CardModel {
     @NotNull
     @NotBlank
     @NotEmpty(message = "el numero de cuenta debe tener un largo especifico")
-    @JsonProperty("numero-cuenta")
+    @JsonProperty("cuenta")
     private String accountNumber;
 
-    @JsonProperty("numero-tarjeta")
+    @JsonProperty("edad")
     @NotNull
     private int age;
 
@@ -49,7 +49,7 @@ public class CardModel {
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
 
-    @JsonProperty("descripcion-memebresia")
+    @JsonProperty("descripcion-tipo")
     private String membership;
 
     public @javax.validation.constraints.NotNull String isStandard() {
