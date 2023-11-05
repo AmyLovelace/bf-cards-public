@@ -41,7 +41,6 @@ public class CardModel {
     private int age;
 
     @JsonProperty("numero-tarjeta")
-    @NotNull
     private String cardNumber;
 
     @JsonProperty("estado-tarjeta")

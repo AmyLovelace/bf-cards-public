@@ -39,7 +39,6 @@ public class CardRest {
     int age;
 
     @JsonProperty("numero-tarjeta")
-    @NotNull
     String cardNumber;
 
 
