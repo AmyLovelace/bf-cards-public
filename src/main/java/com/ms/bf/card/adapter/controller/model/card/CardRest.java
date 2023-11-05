@@ -74,7 +74,7 @@ public class CardRest {
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
-        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_ACTIVE ) ? DEFAULT_CARD_STATUS : this.cardStatus;
+        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_BLOCKED) ? DEFAULT_CARD_STATUS : this.cardStatus;
 
         String generatedCardNumber = generateCardNumber();
 
