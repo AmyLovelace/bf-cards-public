@@ -25,7 +25,7 @@ public class CardRest {
     private static final int CARD_STATUS_BLOCKED = 3;
     private static final String CARD_TYPE_STANDARD = "Standard";
     private static final String CARD_TYPE_PREMIUM = "Premium";
-    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{7,8}-[0-9Kk]$";
+    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     @NotNull
@@ -71,11 +71,13 @@ public class CardRest {
         if (this.age < 18) {
             throw new IllegalArgumentException("El usuario debe tener al menos 18 años para abrir una cuenta.");
         }
+        String generatedCardNumber = generateCardNumber();
+
 
         return Card.builder()
                 .accountNumber(this.accountNumber)
                 .age(this.age)
-                .cardNumber(this.cardNumber != null ? this.cardNumber : generateCardNumber())
+                .cardNumber(generatedCardNumber)
                 .cardStatus(this.cardStatus > 0 ? this.cardStatus : CARD_STATUS_BLOCKED)
                 .descriptionStatus(descriptionStatus())
                 .membership(isStandard())
@@ -83,15 +85,19 @@ public class CardRest {
     }
 
     private String generateCardNumber() {
-        StringBuilder cardNumber = new StringBuilder();
-        for (int i = 0; i < 16; i++) {
-            if (i > 0 && i % 4 == 0) {
-                cardNumber.append("-");
+
+            StringBuilder number = new StringBuilder();
+
+            for (int i = 0; i < 12; i++) {
+                if (i > 0 && i % 3 == 0) {
+                    number.append("-");
+                }
+                int digit = (int) (Math.random() * 10);
+                number.append(digit);
             }
-            int digit = (int) (Math.random() * 10);
-            cardNumber.append(digit);
-        }
-        return cardNumber.toString();
+
+            return number.toString();
+
     }
 
     public String isStandard() {

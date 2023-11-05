@@ -30,7 +30,7 @@ public class CardControllerAdapter {
 
     @CrossOrigin
     @PostMapping(CREATE_CARD)
-    public RestResponse<Integer> createCard(final HttpServletRequest httpServletRequest, @RequestBody CardRest request )throws ExecutionException, InterruptedException{
+    public RestResponse<Integer> createCard(final HttpServletRequest httpServletRequest, @Valid @RequestBody CardRest request )throws ExecutionException, InterruptedException{
         log.info("Llamada al servicio de creacion de tarjetas");
         var response =  createCardIn.create(request.toCardDomain());
         log.info("respuesta del servicio de creacion de tarjetas : [{}] " , response);

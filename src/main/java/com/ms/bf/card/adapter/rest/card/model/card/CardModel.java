@@ -29,7 +29,7 @@ public class CardModel {
     private static final String CARD_MEMBERSHIP_STANDARD = "Standard";
     private static final String CARD_MEMBERSHIP_PREMIUM = "Premium";
     private static final int DEFAULT_CARD_STATUS = CARD_STATUS_ACTIVE;
-    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{7,8}-[0-9Kk]$";
+    private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
 
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,16 +93,20 @@ public class CardModel {
 
     };
     private String generateCardNumber() {
-        StringBuilder cardNumber = new StringBuilder();
-        for (int i = 0; i < 16; i++) {
-            if (i > 0 && i % 4 == 0) {
-                cardNumber.append("-");
+
+        StringBuilder number = new StringBuilder();
+
+        for (int i = 0; i < 12; i++) {
+            if (i > 0 && i % 3 == 0) {
+                number.append("-");
             }
             int digit = (int) (Math.random() * 10);
-            cardNumber.append(digit);
+            number.append(digit);
         }
-        return cardNumber.toString();
+
+        return number.toString();
     }
+
 
 
     public Card toCardDomain() {
