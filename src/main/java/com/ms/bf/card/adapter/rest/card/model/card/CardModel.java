@@ -44,7 +44,7 @@ public class CardModel {
     private String cardNumber;
 
     @JsonProperty("estado-tarjeta")
-    private Integer cardStatus;
+    private Integer cardStatus = DEFAULT_CARD_STATUS;
 
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
@@ -61,6 +61,7 @@ public class CardModel {
         }
 
         int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_BLOCKED) ? DEFAULT_CARD_STATUS : this.cardStatus;
+
 
         String generatedCardNumber = generateCardNumber();
 

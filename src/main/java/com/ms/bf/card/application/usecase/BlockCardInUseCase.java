@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BlockCardInUseCase implements BlockCardIn {
 
     private final KafkaProducerPort kafkaProducerPort;
-    
+
     @Override
     public Integer block(BlockCard blockedCard) {
         return null;

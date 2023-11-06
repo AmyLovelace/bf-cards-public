@@ -32,7 +32,7 @@ public class KafkaProducerAdapter implements KafkaProducerPort{
             log.info("Message sent -> {} ", card.toString());
             Message<Card> message = MessageBuilder.withPayload(card).setHeader(KafkaHeaders.TOPIC, kafkaProperty.getTopicName()).build();
             kafkaTemplate.send(message);
-            log.info("Sent message value: {}", card.toString());
+            log.info("Sent message value: {}", card);
             return 0;
         } catch (MessagingException e) {
             log.error("Error al generar el mensaje: ", e);
