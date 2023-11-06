@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.ms.bf.card.adapter.controller.model.CardValidator.CardValidator;
 import com.ms.bf.card.config.ErrorCode;
 import com.ms.bf.card.config.exception.CardException;
 import com.ms.bf.card.domain.Card;
@@ -71,24 +72,12 @@ public class CardRest {
 
 
     public Card toCardDomain() {
-        if (!isValidAccountNumber(this.accountNumber)) {
+        if (!CardValidator.isValidAccountNumber(this.accountNumber)) {
             throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
         }
-        if (!isValidAccountNumber(this.accountNumber)) {
-            throw new IllegalArgumentException("El número de cuenta no tiene el formato de RUT válido.");
-        }
-        try {
-            int age = Integer.parseInt(String.valueOf(this.age));
-            if (age < 18) {
-                throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
-            }
-        } catch (NumberFormatException e) {
+        if (!CardValidator.isValidAge(this.age)) {
             throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
         }
-
-        int cardStatusValue = (this.cardStatus == null || this.cardStatus != CARD_STATUS_BLOCKED) ? DEFAULT_CARD_STATUS : this.cardStatus;
-
-        String generatedCardNumber = generateCardNumber();
 
 
         return Card.builder()

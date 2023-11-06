@@ -7,6 +7,7 @@ import com.ms.bf.card.adapter.rest.exception.NotFoundRestClientException;
 import com.ms.bf.card.adapter.rest.exception.RestClientGenericException;
 import com.ms.bf.card.adapter.rest.exception.TimeoutRestClientException;
 import com.ms.bf.card.config.ErrorCode;
+import com.ms.bf.card.config.exception.CardException;
 import com.ms.bf.card.config.exception.GenericException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,8 +46,7 @@ public class ErrorHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.error(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        String errorMessage = "Invalid input data";
-        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorCode.CARD_INVALID_REQUEST, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler({NonTargetRestClientException.class, RestClientGenericException.class})
     public ResponseEntity<ErrorResponse> handle(NonTargetRestClientException e) {
@@ -61,6 +61,12 @@ public class ErrorHandler {
     @ExceptionHandler({BadRequestRestClientException.class})
     public ResponseEntity<ErrorResponse> handle(BadRequestRestClientException e) {
         log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(), e);
+        return buildError(HttpStatus.BAD_REQUEST,e,e.getCode());
+    }
+
+    @ExceptionHandler({CardException.class})
+    public ResponseEntity<ErrorResponse> handle(CardException e) {
+        log.error(HttpStatus.FORBIDDEN.getReasonPhrase(), e);
         return buildError(HttpStatus.BAD_REQUEST,e,e.getCode());
     }
 
