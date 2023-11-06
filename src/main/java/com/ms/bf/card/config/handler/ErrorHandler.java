@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +41,12 @@ public class ErrorHandler {
     public ResponseEntity<ErrorResponse> handle(Throwable e) {
         log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR,e, ErrorCode.INTERNAL_ERROR);
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase());
+        String errorMessage = "Invalid input data";
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler({NonTargetRestClientException.class, RestClientGenericException.class})
     public ResponseEntity<ErrorResponse> handle(NonTargetRestClientException e) {

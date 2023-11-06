@@ -44,7 +44,7 @@ public class CardRestClientAdapter implements CardRepository{
     public Card create(Card card) {
         log.info("Servicio crear tarjeta, lo conecta a: [{}]" ,property.getTopicName());
         CardModel response = Optional.ofNullable(restTemplate.postForObject(property.getTopicName(),card, CardModel.class))
-                .orElseThrow(()-> new EmptyOrNullBodyRestClientException(ErrorCode.INTERNAL_ERROR));
+                .orElseThrow(()-> new EmptyOrNullBodyRestClientException(ErrorCode.CARD_INVALID_REQUEST));
         log.info("popo[{}]", response);
         return response.toCardDomain();
     }
