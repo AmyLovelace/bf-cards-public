@@ -64,6 +64,36 @@ public class CardRestTest {
         assertEquals("Activo", result.getDescriptionStatus());
         assertEquals("Standard", result.getMembership());
     }
+    @Test
+    public void testToCardDomainInvalidAccountNumber() {
+        CardRest cardRest = CardRest.builder()
+                .accountNumber("12345678-9")
+                .age(20)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> cardRest.toCardDomain());
+    }
+    @Test
+    public void testToCardDomainAgeUnder18() {
+        CardRest cardRest = CardRest.builder()
+                .accountNumber("12345678-9")
+                .age(17)
+                .build();
+
+        assertThrows(IllegalArgumentException.class, () -> cardRest.toCardDomain());
+    }
+    @Test
+    public void testIsStandardInvalidMembership() {
+        CardRest cardRest = CardRest.builder()
+                .accountNumber("12345678-9")
+                .age(20)
+                .membership("Invalid")
+                .build();
+
+        String result = cardRest.isStandard();
+
+        assertEquals("Standard", result);
+    }
 
     @Test
     public void testToCardDomainThrowsException() {
@@ -73,6 +103,8 @@ public class CardRestTest {
                 .build();
 
         assertThrows(IllegalArgumentException.class, () -> cardRest.toCardDomain());
+
+
     }
 
 }
