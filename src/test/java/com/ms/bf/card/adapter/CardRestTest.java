@@ -17,17 +17,20 @@ public class CardRestTest {
     @Mock
     private Card card;
 
-    @InjectMocks
+    @Mock
     private CardRest cardRest;
+
+
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        cardRest = CardRest.toCardRest(card);
     }
 
-    @Test
+        @Test
     public void testToCardRest() {
-        when(card.getAccountNumber()).thenReturn("12345678-9");
+        when(card.getAccountNumber()).thenReturn("12.345.678-9");
         when(card.getAge()).thenReturn(20);
         when(card.getCardNumber()).thenReturn("123456789012");
         when(card.getCardStatus()).thenReturn(2);
@@ -36,7 +39,7 @@ public class CardRestTest {
 
         CardRest result = CardRest.toCardRest(card);
 
-        assertEquals("12345678-9", result.getAccountNumber());
+        assertEquals("12.345.678-9", result.getAccountNumber());
         assertEquals(20, result.getAge());
         assertEquals("123456789012", result.getCardNumber());
         assertEquals(2, result.getCardStatus());
@@ -47,9 +50,9 @@ public class CardRestTest {
     @Test
     public void testToCardDomain() {
         CardRest cardRest = CardRest.builder()
-                .accountNumber("12345678-9")
+                .accountNumber("12.345.678-9")
                 .age(20)
-                .cardNumber("123456789012")
+                .cardNumber("123-456-789-012")
                 .cardStatus(2)
                 .descriptionStatus("Activo")
                 .membership("Standard")
@@ -57,9 +60,9 @@ public class CardRestTest {
 
         Card result = cardRest.toCardDomain();
 
-        assertEquals("12345678-9", result.getAccountNumber());
+        assertEquals("12.345.678-9", result.getAccountNumber());
         assertEquals(20, result.getAge());
-        assertEquals("123456789012", result.getCardNumber());
+        assertEquals("123-456-789-012", result.getCardNumber());
         assertEquals(2, result.getCardStatus());
         assertEquals("Activo", result.getDescriptionStatus());
         assertEquals("Standard", result.getMembership());
@@ -67,7 +70,7 @@ public class CardRestTest {
     @Test
     public void testToCardDomainInvalidAccountNumber() {
         CardRest cardRest = CardRest.builder()
-                .accountNumber("12345678-9")
+                .accountNumber("12.345.678-9")
                 .age(20)
                 .build();
 
@@ -76,7 +79,7 @@ public class CardRestTest {
     @Test
     public void testToCardDomainAgeUnder18() {
         CardRest cardRest = CardRest.builder()
-                .accountNumber("12345678-9")
+                .accountNumber("12.345.678-9")
                 .age(17)
                 .build();
 
@@ -85,7 +88,7 @@ public class CardRestTest {
     @Test
     public void testIsStandardInvalidMembership() {
         CardRest cardRest = CardRest.builder()
-                .accountNumber("12345678-9")
+                .accountNumber("12.345.678-9")
                 .age(20)
                 .membership("Invalid")
                 .build();
@@ -98,7 +101,7 @@ public class CardRestTest {
     @Test
     public void testToCardDomainThrowsException() {
         CardRest cardRest = CardRest.builder()
-                .accountNumber("12345678-9")
+                .accountNumber("12.345.678-9")
                 .age(17)
                 .build();
 
