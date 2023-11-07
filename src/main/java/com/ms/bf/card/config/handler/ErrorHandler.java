@@ -8,6 +8,7 @@ import com.ms.bf.card.adapter.rest.exception.RestClientGenericException;
 import com.ms.bf.card.adapter.rest.exception.TimeoutRestClientException;
 import com.ms.bf.card.config.ErrorCode;
 import com.ms.bf.card.config.exception.CardException;
+import com.ms.bf.card.config.exception.CustomHttpMessageNotReadableException;
 import com.ms.bf.card.config.exception.GenericException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,8 +48,8 @@ public class ErrorHandler {
         log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR,e, ErrorCode.INTERNAL_ERROR);
     }
-    @ExceptionHandler({HttpMessageNotReadableException.class})
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+    @ExceptionHandler({CustomHttpMessageNotReadableException.class})
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(CustomHttpMessageNotReadableException ex) {
         log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex);
 
         final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(ex.getStackTrace()) : "";

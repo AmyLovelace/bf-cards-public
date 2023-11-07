@@ -2,6 +2,7 @@ package com.ms.bf.card.application.usecase;
 
 import com.ms.bf.card.adapter.kafka.KafkaProducerPort;
 import com.ms.bf.card.application.port.in.CreateIn;
+import com.ms.bf.card.config.exception.CustomHttpMessageNotReadableException;
 import com.ms.bf.card.domain.Card;
 import com.ms.bf.card.config.exception.GenericException;
 import com.ms.bf.card.config.ErrorCode;
@@ -22,9 +23,9 @@ public class CreateCardInUseCase implements CreateIn {
     public Integer create(Card card) throws GenericException {
         try {
             return kafkaProducerPort.sendMessage(card);
-        } catch (MessagingException e) {
+        } catch (CustomHttpMessageNotReadableException e) {
             log.error("Error al generar el mensaje: ", e);
-            throw new GenericException(ErrorCode.CARD_INVALID_REQUEST, "Error al generar el mensaje");
+            throw new CustomHttpMessageNotReadableException(ErrorCode.CARD_INVALID_REQUEST);
         }
     }
 }
