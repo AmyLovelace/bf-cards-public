@@ -28,8 +28,9 @@ public class CardRestClientAdapter implements CardRepository{
 
 
 
-    public CardRestClientAdapter( RestTemplate restTemplate) {
+    public CardRestClientAdapter(RestTemplate restTemplate, KafkaProperty property) {
         this.restTemplate = restTemplate;
+        this.property = property;
         var errorHandler = new RestTemplateErrorHandler(
                 Map.of(
                         HttpStatus.NOT_FOUND, new NotFoundRestClientException(ErrorCode.ACCOUNT_NOT_FOUND),
