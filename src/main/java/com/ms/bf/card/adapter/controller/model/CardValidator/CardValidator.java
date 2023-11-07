@@ -8,7 +8,6 @@ public class CardValidator {
     private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
     private static final Pattern ACCOUNT_NUMBER_PATTERN = Pattern.compile(ACCOUNT_NUMBER_REGEX);
     // Assuming there's a specific regex for card number validation, replace "Your_Card_Number_Regex" with the actual regex
-    private static final String CARD_NUMBER_REGEX = "Your_Card_Number_Regex";
 
     public static boolean isValidAccountNumber(String accountNumber) {
         if (accountNumber == null || accountNumber.isEmpty()) {

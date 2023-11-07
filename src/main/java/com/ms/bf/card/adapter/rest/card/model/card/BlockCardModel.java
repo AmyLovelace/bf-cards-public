@@ -37,31 +37,9 @@ public class BlockCardModel {
     @JsonProperty("descripcion-estado")
     private String descriptionStatus;
 
-    public String descriptionStatus() {
-        if (this.cardStatus == CARD_STATUS_ACTIVE) {
-            setDescriptionStatus("Activo");
-        } else if (this.cardStatus == null) {
-            setDescriptionStatus("Bloqueado");
 
-        }
-        return descriptionStatus;
-    }
-    private boolean validateCardNumber(String cardNumber) {
-        String regex = "^\\d{4}-\\d{4}-\\d{4}-\\d{4}$";
-        return cardNumber.matches(regex);
-    }
-    public Card toCardDomain() {
-        if (!validateCardNumber(this.cardNumber)) {
-            throw new IllegalArgumentException("Invalid card number format");
-        }
-        return Card.builder()
-                .accountNumber(this.accountNumber)
-                .cardNumber(descriptionStatus())
-                .cardStatus(this.cardStatus)
-                .descriptionStatus(descriptionStatus())
-                .build();
 
-    }
+
 
 
 }

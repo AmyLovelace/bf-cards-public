@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +23,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @ControllerAdvice
@@ -71,17 +75,42 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<ErrorResponse> handle(MethodArgumentNotValidException ex) {
-        log.error(ErrorCode.CARD_BAD_REQUEST.getReasons(), ex);
-        return buildError(HttpStatus.NOT_FOUND, ex, ErrorCode.CARD_BAD_REQUEST);
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        BindingResult bindingResult = ex.getBindingResult();
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        List<String> errorMessages = fieldErrors.stream()
+                .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
+                .collect(Collectors.toList());
+
+        String detail = String.join(", ", errorMessages);
+
+        final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(ex.getStackTrace()) : "";
+        final var queryString = Optional.ofNullable(request.getQueryString()).orElse("");
+        final var metaData = Map.of(
+                "query_string", queryString,
+                "stack_trace", isDebugMessage);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .name(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .detail(detail)
+                .status(HttpStatus.BAD_REQUEST.value())
+                .code(ErrorCode.CARD_BAD_REQUEST.getValue())
+                .resource(request.getRequestURI())
+                .metadata(metaData)
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
 
-@ExceptionHandler({TimeoutRestClientException.class})
-    public ResponseEntity<ErrorResponse> handle(TimeoutRestClientException e) {
-        log.error(HttpStatus.REQUEST_TIMEOUT.getReasonPhrase(), e);
-        return buildError(HttpStatus.REQUEST_TIMEOUT,e,e.getCode());
-    }
+
+
+    @ExceptionHandler({TimeoutRestClientException.class})
+        public ResponseEntity<ErrorResponse> handle(TimeoutRestClientException e) {
+            log.error(HttpStatus.REQUEST_TIMEOUT.getReasonPhrase(), e);
+            return buildError(HttpStatus.REQUEST_TIMEOUT,e,e.getCode());
+        }
 
     private ResponseEntity<ErrorResponse> buildError(HttpStatus httpStatus, Throwable e, ErrorCode code) {
         final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(e.getStackTrace()) : "";
