@@ -1,9 +1,9 @@
 package com.ms.bf.card.adapter.controller.card;
+import com.ms.bf.card.adapter.controller.model.card.AccountRest;
 import com.ms.bf.card.application.port.in.CreateIn;
 import lombok.extern.slf4j.Slf4j;
 
 import com.ms.bf.card.adapter.controller.model.RestResponse;
-import com.ms.bf.card.adapter.controller.model.card.CardRest;
 import com.ms.bf.card.adapter.controller.processor.Processor;
 import com.ms.bf.card.adapter.controller.processor.RequestProcessor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +30,7 @@ public class CardControllerAdapter {
 
     @CrossOrigin
     @PostMapping(CREATE_CARD)
-    public RestResponse<Integer> createCard(final HttpServletRequest httpServletRequest, @Valid @RequestBody CardRest request )throws ExecutionException, InterruptedException{
+    public RestResponse<Integer> createCard(final HttpServletRequest httpServletRequest, @Valid @RequestBody AccountRest request )throws ExecutionException, InterruptedException{
         log.info("Llamada al servicio de creacion de tarjetas");
         var response =  createCardIn.create(request.toCardDomain());
         log.info("respuesta del servicio de creacion de tarjetas : [{}] " , response);

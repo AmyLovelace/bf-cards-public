@@ -48,8 +48,21 @@ public class ErrorHandler {
         log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR,e, ErrorCode.INTERNAL_ERROR);
     }
-    @ExceptionHandler({CustomHttpMessageNotReadableException.class})
-    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(CustomHttpMessageNotReadableException ex) {
+    @ExceptionHandler(CustomHttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleCustomHttpMessageNotReadableException(CustomHttpMessageNotReadableException ex) {
+        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex);
+
+        final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(ex.getStackTrace()) : "";
+        final var queryString = Optional.ofNullable(request.getQueryString()).orElse("");
+        final var metaData = Map.of(
+                "query_string", queryString,
+                "stack_trace", isDebugMessage);
+
+        return buildError(HttpStatus.BAD_REQUEST,ex,ErrorCode.CARD_INVALID_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex);
 
         final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(ex.getStackTrace()) : "";
@@ -61,7 +74,7 @@ public class ErrorHandler {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .name(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .detail(String.valueOf(ErrorCode.CARD_INVALID_REQUEST.getReasons()))
+                .detail("Error al parsear el cuerpo de la solicitud. Por favor, verifique que el cuerpo de la solicitud sea un JSON válido.")
                 .status(HttpStatus.BAD_REQUEST.value())
                 .code(ErrorCode.CARD_INVALID_REQUEST.getValue())
                 .resource(request.getRequestURI())
@@ -70,6 +83,8 @@ public class ErrorHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+
 
     @ExceptionHandler({NonTargetRestClientException.class, RestClientGenericException.class})
     public ResponseEntity<ErrorResponse> handle(NonTargetRestClientException e) {

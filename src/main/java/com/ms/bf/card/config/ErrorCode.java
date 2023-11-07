@@ -9,7 +9,7 @@ import org.springframework.lang.Nullable;
 public enum ErrorCode {
     INTERNAL_ERROR(100, Series.SERVER_ERROR,"Error interno del servidor"),
     WEB_CLIENT_GENERIC(101, Series.CLIENT_ERROR,"Error del Web client"),
-    CARD_INVALID_REQUEST(102, Series.CLIENT_ERROR, "datos con formato invalido"),
+    CARD_INVALID_REQUEST(102, Series.CLIENT_ERROR, "datos invalidos o con formato no aplicable "),
     CARD_BAD_REQUEST(103, Series.CLIENT_ERROR, "La tarjeta no existe o peticion invalida"),
     ACCOUNT_NOT_FOUND(104, Series.CLIENT_ERROR,"No se encontro numero de cuenta de usuario"),
     CARD_TIMEOUT(105, Series.SERVER_ERROR,"El llamado a tarjeta devolvio error");

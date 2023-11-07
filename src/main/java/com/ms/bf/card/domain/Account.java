@@ -5,7 +5,7 @@ import lombok.Value;
 
 @Value
 @Builder
-public class Card{
+public class Account{
 
     String accountNumber;
     int age;

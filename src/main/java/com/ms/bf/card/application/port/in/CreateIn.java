@@ -1,8 +1,8 @@
 package com.ms.bf.card.application.port.in;
 
-import com.ms.bf.card.domain.Card;
+import com.ms.bf.card.domain.Account;
 
 public interface CreateIn {
 
-       Integer create(Card card);
+       Integer create(Account account);
 }

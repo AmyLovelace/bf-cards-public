@@ -5,24 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.ms.bf.card.config.ErrorCode;
-import com.ms.bf.card.config.exception.CardException;
-import com.ms.bf.card.domain.Card;
+import com.ms.bf.card.domain.Account;
 import lombok.Data;
-import org.apache.commons.lang3.math.NumberUtils;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CardModel {
+public class AccountModel {
 
     private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
     private static final Pattern ACCOUNT_NUMBER_PATTERN = Pattern.compile(ACCOUNT_NUMBER_REGEX);
@@ -38,10 +32,10 @@ public class CardModel {
     @NotNull
     private int age;
 
-    public Card toCardDomain() {
+    public Account toCardDomain() {
 
 
-        return Card.builder()
+        return Account.builder()
                 .accountNumber(this.accountNumber)
                 .age(this.age)
                 .build();

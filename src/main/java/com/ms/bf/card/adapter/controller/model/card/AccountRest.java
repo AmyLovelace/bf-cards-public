@@ -7,21 +7,19 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.ms.bf.card.adapter.controller.model.CardValidator.CardValidator;
 import com.ms.bf.card.config.ErrorCode;
 import com.ms.bf.card.config.exception.CardException;
-import com.ms.bf.card.domain.Card;
+import com.ms.bf.card.domain.Account;
 import lombok.Builder;
 import lombok.Data;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.regex.Matcher;
 
 
 @Data
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class CardRest {
+public class AccountRest {
 
 
     private static final String ACCOUNT_NUMBER_REGEX = "^[0-9]{1,3}(\\.[0-9]{3})*-[0-9Kk]$";
@@ -39,19 +37,19 @@ public class CardRest {
     int age;
 
 
-    public static CardRest toCardRest(Card card) {
+    public static AccountRest toCardRest(Account card) {
         if (card == null) {
             return null;
         }
 
-        return CardRest.builder()
+        return AccountRest.builder()
                 .accountNumber(card.getAccountNumber())
                 .age(card.getAge())
                 .build();
     }
 
 
-    public Card toCardDomain() {
+    public Account toCardDomain() {
         if (!CardValidator.isValidAccountNumber(this.accountNumber)) {
             throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
         }
@@ -60,7 +58,7 @@ public class CardRest {
             throw new CardException(ErrorCode.CARD_INVALID_REQUEST);
         }
 
-        return Card.builder()
+        return Account.builder()
                 .accountNumber(this.accountNumber)
                 .age(this.age)
                 .build();

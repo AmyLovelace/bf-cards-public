@@ -1,15 +1,15 @@
 package com.ms.bf.card.adapter.rest.card;
 
+import com.ms.bf.card.adapter.rest.card.model.card.AccountModel;
 import com.ms.bf.card.adapter.rest.exception.BadRequestRestClientException;
 import com.ms.bf.card.adapter.rest.exception.EmptyOrNullBodyRestClientException;
 import com.ms.bf.card.adapter.rest.exception.NotFoundRestClientException;
 import com.ms.bf.card.adapter.rest.exception.TimeoutRestClientException;
 import com.ms.bf.card.adapter.rest.handler.RestTemplateErrorHandler;
-import com.ms.bf.card.adapter.rest.card.model.card.CardModel;
 import com.ms.bf.card.application.port.out.CardRepository;
 import com.ms.bf.card.config.ErrorCode;
 import com.ms.bf.card.config.property.KafkaProperty;
-import com.ms.bf.card.domain.Card;
+import com.ms.bf.card.domain.Account;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
@@ -42,9 +42,9 @@ public class CardRestClientAdapter implements CardRepository{
     }
 
     @Override
-    public Card create(Card card) {
+    public Account create(Account account) {
         log.info("Servicio crear tarjeta, lo conecta a: [{}]" ,property.getTopicName());
-        CardModel response = Optional.ofNullable(restTemplate.postForObject(property.getTopicName(),card, CardModel.class))
+        AccountModel response = Optional.ofNullable(restTemplate.postForObject(property.getTopicName(),account, AccountModel.class))
                 .orElseThrow(()-> new EmptyOrNullBodyRestClientException(ErrorCode.CARD_INVALID_REQUEST));
         log.info("popo[{}]", response);
         return response.toCardDomain();
