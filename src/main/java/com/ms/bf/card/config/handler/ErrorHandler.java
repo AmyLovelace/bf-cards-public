@@ -47,10 +47,10 @@ public class ErrorHandler {
         log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR,e, ErrorCode.INTERNAL_ERROR);
     }
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        return new ResponseEntity<>(ErrorCode.CARD_INVALID_REQUEST, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler({HttpMessageNotReadableException.class})
+    public ResponseEntity<ErrorResponse> handle(HttpMessageNotReadableException e) {
+        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(),e);
+        return buildError(HttpStatus.BAD_REQUEST,e,e.getCode());
     }
     @ExceptionHandler({NonTargetRestClientException.class, RestClientGenericException.class})
     public ResponseEntity<ErrorResponse> handle(NonTargetRestClientException e) {
