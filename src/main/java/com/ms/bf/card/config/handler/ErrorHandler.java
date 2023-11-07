@@ -48,10 +48,28 @@ public class ErrorHandler {
         return buildError(HttpStatus.INTERNAL_SERVER_ERROR,e, ErrorCode.INTERNAL_ERROR);
     }
     @ExceptionHandler({HttpMessageNotReadableException.class})
-    public ResponseEntity<ErrorResponse> handle(HttpMessageNotReadableException e) {
-        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(),e);
-        return buildError(HttpStatus.BAD_REQUEST,e,e.getCode());
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.error(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex);
+
+        final var isDebugMessage = DEVELOP_PROFILE.equals(profile) || LOCAL_PROFILE.equals(profile) ? Arrays.toString(ex.getStackTrace()) : "";
+        final var queryString = Optional.ofNullable(request.getQueryString()).orElse("");
+        final var metaData = Map.of(
+                "query_string", queryString,
+                "stack_trace", isDebugMessage);
+
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .name(HttpStatus.BAD_REQUEST.getReasonPhrase())
+                .detail(String.valueOf(ErrorCode.CARD_INVALID_REQUEST.getReasons()))
+                .status(HttpStatus.BAD_REQUEST.value())
+                .code(ErrorCode.CARD_INVALID_REQUEST.getValue())
+                .resource(request.getRequestURI())
+                .metadata(metaData)
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler({NonTargetRestClientException.class, RestClientGenericException.class})
     public ResponseEntity<ErrorResponse> handle(NonTargetRestClientException e) {
         log.error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e);
