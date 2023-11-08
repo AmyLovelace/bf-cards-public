@@ -1,5 +1,6 @@
 package com.ms.bf.card.application.usecase;
 
+import com.ms.bf.card.adapter.controller.model.card.AccountRest;
 import com.ms.bf.card.adapter.kafka.KafkaProducerPort;
 import com.ms.bf.card.application.port.in.CreateIn;
 import com.ms.bf.card.config.exception.CustomHttpMessageNotReadableException;
