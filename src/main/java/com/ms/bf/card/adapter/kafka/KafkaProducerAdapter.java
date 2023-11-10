@@ -2,6 +2,8 @@ package com.ms.bf.card.adapter.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ms.bf.card.adapter.controller.model.card.AccountRest;
+import com.ms.bf.card.adapter.rest.card.model.card.AccountModel;
 import com.ms.bf.card.config.property.KafkaProperty;
 import com.ms.bf.card.domain.Account;
 import com.ms.bf.card.config.exception.GenericException;

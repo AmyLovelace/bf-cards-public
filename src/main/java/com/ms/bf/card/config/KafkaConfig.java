@@ -26,10 +26,16 @@ public class KafkaConfig {
         Map<String,String> configurations = new HashMap<>();
         configurations.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE);
         configurations.put(TopicConfig.RETENTION_MS_CONFIG, kafkaProperty.getRetentionMsConfig());
-        log.error(kafkaProperty.getDummy());
 
-        return TopicBuilder.name(kafkaProperty.getTopicName())
+
+        var X = TopicBuilder.name(kafkaProperty.getTopicName())
+
                 .configs(configurations)
                 .build();
+        log.error("[{}]",X);
+        return X;
+
     }
+
+
 }

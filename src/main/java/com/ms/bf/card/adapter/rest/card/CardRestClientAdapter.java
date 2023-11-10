@@ -48,6 +48,7 @@ public class CardRestClientAdapter implements CardRepository{
                 .orElseThrow(()-> new EmptyOrNullBodyRestClientException(ErrorCode.CARD_INVALID_REQUEST));
         log.info("popo[{}]", response);
         return response.toCardDomain();
+
     }
 
 
