@@ -27,15 +27,10 @@ public class KafkaConfig {
         configurations.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE);
         configurations.put(TopicConfig.RETENTION_MS_CONFIG, kafkaProperty.getRetentionMsConfig());
 
-
-        var X = TopicBuilder.name(kafkaProperty.getTopicName())
+        return TopicBuilder.name(kafkaProperty.getTopicName())
 
                 .configs(configurations)
                 .build();
-        log.error("[{}]",X);
-        return X;
-
     }
-
 
 }
