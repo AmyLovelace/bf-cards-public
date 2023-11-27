@@ -9,7 +9,7 @@ public class GenericException extends RuntimeException {
     private static final String COMMA = ",";
     private final ErrorCode errorCode;
 
-    protected GenericException(ErrorCode errorCode) {
+    public GenericException(ErrorCode errorCode) {
         super(errorCode.getReason());
         this.errorCode = errorCode;
     }

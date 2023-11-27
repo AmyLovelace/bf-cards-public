@@ -7,8 +7,12 @@ import lombok.Value;
 @Builder
 public class Account{
 
+    String name;
+
     String accountNumber;
+
     int age;
+
 
 
 }

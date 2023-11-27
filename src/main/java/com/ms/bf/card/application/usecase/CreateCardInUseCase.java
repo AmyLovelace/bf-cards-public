@@ -24,9 +24,9 @@ public class CreateCardInUseCase implements CreateIn {
     public Integer create(Account account) throws GenericException {
         try {
             return kafkaProducerPort.sendMessage(account);
-        } catch (CustomHttpMessageNotReadableException e) {
+        } catch (RuntimeException e) {
             log.error("Error al generar el mensaje: ", e);
-            throw new CustomHttpMessageNotReadableException(ErrorCode.CARD_INVALID_REQUEST);
+            throw new GenericException(ErrorCode.CARD_INVALID_REQUEST);
         }
     }
 }
