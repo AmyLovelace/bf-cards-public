@@ -1,3 +1,6 @@
+name: Amy Lovelace
+permissions: amanecer.luz.cabrera@gmail.com
+
 on:
  schedule:
  - cron: '0 * * * *'
