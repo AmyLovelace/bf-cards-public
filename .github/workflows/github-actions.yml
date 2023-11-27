@@ -10,7 +10,7 @@ jobs:
      - name: Checkout code
        uses: actions/checkout@v2
      - name: Run script
-       run: node ${{ env.GITHUB_WORKSPACE }}/script.js
+       run: node /script.js
      - name: Commit and push if it changed
        run: |
          git diff
