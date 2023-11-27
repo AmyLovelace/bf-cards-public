@@ -15,7 +15,7 @@ jobs:
        run: |
          git diff
          git config --local user.email "amanecer.luz.cabrera@gmail.com" # setup commit email
-          git config --local user.name "Amy Lovelace" # setup commit name
-         git commit -am "Add comment" || exit 0
+            git config --local user.name "Amy Lovelace" # setup commit name
+            git diff --quiet && git diff --staged --quiet || git commit -am "Add comment"
          git push
 
