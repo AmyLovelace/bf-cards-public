@@ -1,19 +1,21 @@
+name: Cambiar comentario
 on:
- schedule:
- - cron: '*/15 * * * *'
-
+  schedule:
+    - cron: '*/15 * * * *'
 jobs:
- cambiar-comentario:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - name: Cambiar comentario
-      run: |
-        git config user.name "Amy Lovelace"
-        git config user.email "amanecer.luz.cabrera@gmail.com"
-        # Cambiar el comentario en el archivo
-        echo "Nuevo comentario" > archivo.txt
-        sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
-        git add archivo.txt
-        git commit -m "Cambiar comentario"
-        git push
+  cambiar-comentario:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cambiar comentario
+        run: |
+          git config user.name "Amy Lovelace"
+          git config user.email "amanecer.luz.cabrera@gmail.com"
+          # Cambiar el comentario en el archivo
+          echo "Nuevo comentario" > archivo.txt
+          sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
+          git add archivo.txt
+          # Eliminar el archivo anterior
+          rm archivo.txt
+          git commit -m "Cambiar comentario"
+          git push
