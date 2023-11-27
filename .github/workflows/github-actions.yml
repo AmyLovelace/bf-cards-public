@@ -3,22 +3,26 @@ on:
   schedule:
     - cron: '*/15 * * * *'
 jobs:
-  cambiar-comentario:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Cambiar comentario
+      - uses: actions/checkout@master
+        with:
+          ref: trunk
+          persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: 'Set up Python 3.x'
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: 'Make trash commits'
         run: |
-          git config user.name "Amy Lovelace"
-          git config user.email "amanecer.luz.cabrera@gmail.com"
-          # Cambiar el comentario en el archivo
-          echo "Nuevo comentario" > archivo.txt
-          sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
-          # Agregar el archivo al índice
-          git add archivo.txt
-          # Eliminar el archivo anterior
-          rm archivo.txt
-          # Realizar el commit
-          git commit -m "Cambiar comentario"
-          git push
-
+          git config --local user.email "amanecer.luz.cabrera@gmail.com" # setup commit email
+          git config --local user.name "Amy Lovelace" # setup commit name
+          python make_commits.py # actually make the commits
+      - name: 'Push changes'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          force: 'true'
+          branch: 'master'
