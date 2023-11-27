@@ -18,15 +18,16 @@ on:
  - cron: '45 3 * * *'
 
 jobs:
- commit:
-  runs-on: ubuntu-latest
-  steps:
-  - name: Checkout
-    uses: actions/checkout@v2
-  - name: Commit and push
-    run: |
-      git config user.name "Amy Lovelace"
-      git config user.email "amanecer.luz.cabrera@gmail.com"
-      git add .
-      git commit -m "greeting from github actions"
-      git push
+  cambiar-comentario:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cambiar comentario
+        run: |
+          # Cambiar el comentario en el archivo
+          echo "Nuevo comentario" > archivo.txt
+          sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
+          git add archivo.txt
+          git commit -m "Cambiar comentario"
+          git push
+      
