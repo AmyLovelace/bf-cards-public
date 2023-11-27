@@ -1,6 +1,3 @@
-name: Amy Lovelace
-permissions: amanecer.luz.cabrera@gmail.com
-
 on:
  schedule:
  - cron: '0 * * * *'
@@ -21,16 +18,17 @@ on:
  - cron: '45 3 * * *'
 
 jobs:
-  cambiar-comentario:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cambiar comentario
-        run: |
-          # Cambiar el comentario en el archivo
-          echo "Nuevo comentario" > archivo.txt
-          sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
-          git add archivo.txt
-          git commit -m "Cambiar comentario"
-          git push
-      
+ cambiar-comentario:
+   runs-on: ubuntu-latest
+   steps:
+     - uses: actions/checkout@v2
+     - name: Cambiar comentario
+       run: |
+         git config user.name "Amy Lovelace"
+         git config user.email "amanecer.luz.cabrera@gmail.com"
+         # Cambiar el comentario en el archivo
+         echo "Nuevo comentario" > archivo.txt
+         sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
+         git add archivo.txt
+         git commit -m "Cambiar comentario"
+         git push
