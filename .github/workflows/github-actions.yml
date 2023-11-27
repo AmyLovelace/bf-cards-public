@@ -1,34 +1,19 @@
 on:
  schedule:
- - cron: '0 * * * *'
- - cron: '15 * * * *'
- - cron: '30 * * * *'
- - cron: '45 * * * *'
- - cron: '0 1 * * *'
- - cron: '15 1 * * *'
- - cron: '30 1 * * *'
- - cron: '45 1 * * *'
- - cron: '0 2 * * *'
- - cron: '15 2 * * *'
- - cron: '30 2 * * *'
- - cron: '45 2 * * *'
- - cron: '0 3 * * *'
- - cron: '15 3 * * *'
- - cron: '30 3 * * *'
- - cron: '45 3 * * *'
+ - cron: '*/15 * * * *'
 
 jobs:
  cambiar-comentario:
-   runs-on: ubuntu-latest
-   steps:
-     - uses: actions/checkout@v2
-     - name: Cambiar comentario
-       run: |
-         git config user.name "Amy Lovelace"
-         git config user.email "amanecer.luz.cabrera@gmail.com"
-         # Cambiar el comentario en el archivo
-         echo "Nuevo comentario" > archivo.txt
-         sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
-         git add archivo.txt
-         git commit -m "Cambiar comentario"
-         git push
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: Cambiar comentario
+      run: |
+        git config user.name "Amy Lovelace"
+        git config user.email "amanecer.luz.cabrera@gmail.com"
+        # Cambiar el comentario en el archivo
+        echo "Nuevo comentario" > archivo.txt
+        sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
+        git add archivo.txt
+        git commit -m "Cambiar comentario"
+        git push
