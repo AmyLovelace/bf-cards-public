@@ -14,10 +14,11 @@ jobs:
           # Cambiar el comentario en el archivo
           echo "Nuevo comentario" > archivo.txt
           sed -i 's/Comentario antiguo/Nuevo comentario/g' archivo.txt
+          # Agregar el archivo al índice
           git add archivo.txt
           # Eliminar el archivo anterior
           rm archivo.txt
-          # Crear un nuevo archivo
-          touch nuevo_archivo.txt
+          # Realizar el commit
           git commit -m "Cambiar comentario"
           git push
+
