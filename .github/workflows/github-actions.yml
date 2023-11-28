@@ -2,7 +2,7 @@
 name: Cron Job
 on:
  schedule:
-   - cron: '*/15 * * * *' # Ejecuta el job cada 15 minutos
+   - cron: '*/15 * * * *' 
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,9 +18,9 @@ jobs:
           python-version: '3.x'
       - name: 'Make trash commits'
         run: |
-         git config --local user.email "amanecer.luz.cabrera@gmail.com" # setup commit email
-            git config --local user.name "Amy Lovelace" # setup commit name
-          python commit_queen.py # actually make the commits
+         git config --local user.email "amanecer.luz.cabrera@gmail.com" 
+            git config --local user.name "Amy Lovelace" 
+          python commit_queen.py
       - name: 'Push changes'
         uses: ad-m/github-push-action@master
         with:
