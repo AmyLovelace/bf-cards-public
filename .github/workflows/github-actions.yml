@@ -20,7 +20,7 @@ jobs:
         run: |
          git config --local user.email "amanecer.luz.cabrera@gmail.com" # setup commit email
             git config --local user.name "Amy Lovelace" # setup commit name
-          python make_commits.py # actually make the commits
+          python commit_queen.py # actually make the commits
       - name: 'Push changes'
         uses: ad-m/github-push-action@master
         with:
