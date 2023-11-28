@@ -2,6 +2,8 @@ name: Cron Job
 on:
   schedule:
     - cron: '*/15 * * * *'
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,8 +24,8 @@ jobs:
           python commit_queen.py
 
       - name: 'Push changes'
-        uses: ad-m/github-push-action@master
+        uses: ad-m/github-push-action@v0.6.0
         with:
-          github_token: ${{ secrets.TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           force: 'true'
-          branch: 'commitQueen'
+          branch: 'trunk'
