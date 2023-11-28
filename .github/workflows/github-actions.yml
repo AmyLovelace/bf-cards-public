@@ -17,24 +17,10 @@ jobs:
           python-version: '3.x'
       - name: 'Make trash commits'
         run: |
-          python commit_queen.py
           git config --local user.email "amanecer.luz.cabrera@gmail.com"
           git config --local user.name "Amy Lovelace"
+          python commit_queen.py
 
-          for n in range(random.randint(1, 6)):
-            to_write = f'{random.choice(messages)}\n' * 100
-
-            if n > 4:
-              # Create the file
-              os.system(f'echo "{to_write}" > "bin/generated-{random.randint(1, 10)}.txt"')
-
-              # Add the file to the staging area
-              git add "bin/generated-{random.randint(1, 10)}.txt"
-            else:
-              # Append to the file
-              os.system(f'echo "{to_write}" >> bin/generated-{random.randint(1, 10)}.txt')
-
-            os.system('git commit -m "{q(random.choice(messages))}"')
       - name: 'Push changes'
         uses: ad-m/github-push-action@master
         with:
