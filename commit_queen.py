@@ -6,11 +6,11 @@ q=lambda z:''.join([v,v+''.join(random.choice(list(map(chr,range(768,815))))for 
 
 # these messages taken from a list of most common commit messages
 messages=[
-	"initial commit",
-	"update readme.md",
-	"update",
-	"bump version",
-	"updates"	
+	"change your stars",
+	"what did you want to be raymond k hessel ?",
+	"this is your pain ",
+	"i see you",
+	"commit queen in da house"	
 ]
 
 # I couldn't get the bash for loop to run in the github action, so... here we are.
