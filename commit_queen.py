@@ -15,7 +15,7 @@ for n in range(random.randint(1, 6)):
             os.system(f'echo "{to_write}" > "bin/generated-{random.randint(1, 10)}.txt"')
 
         # Add the file to the staging area
-        os.system(git add "bin/generated-{random.randint(1, 10)}.txt")
+        os.system(f'git add "bin/generated-{random.randint(1, 10)}.txt",)
     else:
         # Append to the file
         os.system(f'echo "{to_write}" >> bin/generated-{random.randint(1, 10)}.txt')
