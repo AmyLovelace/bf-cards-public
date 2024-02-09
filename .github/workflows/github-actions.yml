@@ -13,7 +13,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: 'Set up Python 3.x'
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v0.6.0
         with:
           python-version: '3.x'
       - name: 'Make trash commits'
@@ -23,7 +23,7 @@ jobs:
           python commit_queen.py
 
       - name: 'Push changes'
-        uses: ad-m/github-push-actions/checkout@v2
+        uses: ad-m/github-push-actions@v0.6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force: 'true'
