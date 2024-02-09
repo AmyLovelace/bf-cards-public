@@ -1,5 +1,9 @@
+
 name: 'Cron Job'
 on:
+  push:
+    branches:
+      - commitQueen
   schedule:
     - cron: '*/15 * * * *'
     
@@ -21,7 +25,6 @@ jobs:
           git config --local user.email "amanecer.luz.cabrera@gmail.com"
           git config --local user.name "Amy Lovelace"
           python commit_queen.py
-
       - name: 'Push changes'
         uses: ad-m/github-push-action@master
         with:
