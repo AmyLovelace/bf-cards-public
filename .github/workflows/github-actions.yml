@@ -13,7 +13,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
       - name: 'Set up Python 3.x'
-        uses: actions/setup-python@v0.6.0
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
       - name: 'Make trash commits'
