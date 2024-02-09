@@ -1,7 +1,10 @@
 name: 'Cron Job'
 on:
+  push:
+    branches:
+      - commitQueen
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/15 * * * *'
     
 jobs:
   build:
