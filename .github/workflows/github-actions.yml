@@ -7,7 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@master
         with:
           ref: commitQueen
           persist-credentials: false
@@ -23,7 +23,7 @@ jobs:
           python commit_queen.py
 
       - name: 'Push changes'
-        uses: ad-m/github-push-actions@v0.6.0
+        uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force: 'true'
