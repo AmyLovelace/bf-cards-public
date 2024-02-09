@@ -9,15 +9,24 @@ messages = ["change your stars",
             "i see you",
             "commit queen in da house"]
 
-for n in range(random.randint(1, 10)):
-    message = q(random.choice(messages))
+#for n in range(random.randint(1, 10)):
+    #message = q(random.choice(messages))
 
     # Generar un número aleatorio para el nombre del archivo txt
-    file_number = random.randint(1, 10)
+    #file_number = random.randint(1, 10)
 
     # Crear el directorio `dumpCommit` si no existe
-    if not os.path.exists("dumpCommit"):
-        os.mkdir("dumpCommit")
+    #if not os.path.exists("dumpCommit"):
+    #    os.mkdir("dumpCommit")
 
     # Crear el archivo txt con el nombre `generated-[numero random de archivo txt]`
-    os.system(f"echo '{message}' > dumpCommit/generated-{file_number}.txt")
+    #os.system(f"echo '{message}' > dumpCommit/generated-{file_number}.txt")
+
+for n in range(random.randint(1, 10)):
+    to_write = f'{random.choice(messages)}\n' * 100
+    if n > 4:
+        os.system(f'echo "{to_write}" > bin/dump-{random.randint(1, 10)}.txt')
+    else:
+        os.system(f'echo "{to_write}" >> bin/dump-{random.randint(1, 10)}.txt')
+    os.system('git add .')
+    os.system(f'git commit -m "{q(random.choice(messages))}"')
